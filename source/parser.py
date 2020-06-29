@@ -1,5 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
+from news_record.news_record import NewsRecord
 
 
 class LibSiteParser:
@@ -15,14 +16,14 @@ class LibSiteParser:
         self.URL_NEWS_ADDRESS = f'http://{address_host}.liblermont.ru/index.php?page=news'
         try:
             news_index_page = self.get_html(self.URL_NEWS_ADDRESS)
-            if news_index_page.status_code == 200:
+            if 200 == news_index_page.status_code:
                 pages_amount = self.get_pages_count(news_index_page.text)
                 for page_number in range(pages_amount + 1):
                     news_page_address = f'{self.URL_NEWS_ADDRESS}&from={page_number * 10}'
                     news_page = self.get_html(news_page_address)
                     self.news_id_list += self.get_news_ids(news_page.text)
             else:
-                print(f"Can't parse this page due to {news_index_page.status_code=}")
+                print(f"Can't parse this page due to {news_index_page.status_code}")
         except requests.exceptions.ConnectionError:
             print('An error with connection')
 
@@ -47,6 +48,7 @@ class LibSiteParser:
     def parse_news(self, root_folder: str):
         page_address = self.URL_NEWS_ADDRESS.rsplit('/', 1)[0]
         # news_data_list = []
+        self.news_id_list.reverse()
         for index, record in enumerate(self.news_id_list):
             current_page = self.get_html(page_address + '/' + record)
             soup = BeautifulSoup(current_page.text, 'lxml')
@@ -54,13 +56,11 @@ class LibSiteParser:
             date_text = soup.find('div', id='news_date').text
             summary_text = soup.find('td', id='nsummary').get_text(strip=True)
             content_text = soup.find('td', id='nsummary').find_next('table').text
+
+            news_rec = NewsRecord([date_text, header_text, summary_text, content_text])
+
             # print(f'{date_text} | {header_text} | {summary_text} | {content_text} \n=====\n')
             print(f'{root_folder}: parse {index + 1} of {len(self.news_id_list)}')
-        #     news_data_list.append(f'{date_text} | {header_text} | {summary_text} | {content_text} \n =====\n')
-        # content_filename = root_folder + os.path.sep + f'{root_folder}_data.csv'
-        # with open(content_filename, mode='w', encoding='utf-8') as f:
-        #     for item in news_data_list:
-        #         f.write(item)
         print(f'Site {page_address} is ready')
 
 
