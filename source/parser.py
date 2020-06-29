@@ -1,9 +1,8 @@
-import os
 import requests
 from bs4 import BeautifulSoup
 
 
-class Parser:
+class LibSiteParser:
 
     HEADERS = {
         'user-agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:77.0) Gecko/20100101 Firefox/77.0',
@@ -47,34 +46,21 @@ class Parser:
 
     def parse_news(self, root_folder: str):
         page_address = self.URL_NEWS_ADDRESS.rsplit('/', 1)[0]
-        news_data_list = []
-        for record in self.news_id_list:
+        # news_data_list = []
+        for index, record in enumerate(self.news_id_list):
             current_page = self.get_html(page_address + '/' + record)
             soup = BeautifulSoup(current_page.text, 'lxml')
             header_text = soup.find('table', id='gblock1').find_previous('h3').text
             date_text = soup.find('div', id='news_date').text
             summary_text = soup.find('td', id='nsummary').get_text(strip=True)
-            summary_text = summary_text.rsplit('.', 1)[0]
-            content_text = soup.find('td', id='nsummary').find_next('table').get_text(strip=True)
-            content_text.replace('\xa0', ' ')
-            content_text.replace('\n', '<br/>')
-            news_data_list.append(f'{date_text} | {header_text} | {summary_text} | {content_text} \n =====\n')
-        content_filename = root_folder + os.path.sep + f'{root_folder}_data.csv'
-        with open(content_filename, mode='w', encoding='utf-8') as f:
-            for item in news_data_list:
-                f.write(item)
-        print(f'Site {page_address} has {len(self.news_id_list)} news records')
+            content_text = soup.find('td', id='nsummary').find_next('table').text
+            # print(f'{date_text} | {header_text} | {summary_text} | {content_text} \n=====\n')
+            print(f'{root_folder}: parse {index + 1} of {len(self.news_id_list)}')
+        #     news_data_list.append(f'{date_text} | {header_text} | {summary_text} | {content_text} \n =====\n')
+        # content_filename = root_folder + os.path.sep + f'{root_folder}_data.csv'
+        # with open(content_filename, mode='w', encoding='utf-8') as f:
+        #     for item in news_data_list:
+        #         f.write(item)
+        print(f'Site {page_address} is ready')
 
 
-if __name__ == '__main__':
-    # hosts_list = 'bash beko beli bess vadi goro issa kame kamet koly kuzn kams kond ' \
-    #              'lopa luni moks mser naro neve lomo pach serd sosn spas tama shem'.split(' ')
-    for host in ['bash']:
-        if not os.path.exists(host):
-            os.mkdir(host)
-        try:
-            mgr = Parser(host)
-            mgr.parse_news(host)
-        except Exception:
-            raise
-            pass

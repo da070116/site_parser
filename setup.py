@@ -8,7 +8,7 @@ setup(
     version='0.0.1',
     author='Alexander Dubrovin',
     author_email='da070116@gmail.com',
-    description='A Python site parser application',
+    description='A Python site source application',
     packages=find_packages(),
     long_description=long_description,
     long_description_content_type='text/markdown',
