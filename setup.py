@@ -5,7 +5,7 @@ with open('README.md', 'r') as readme:
 
 setup(
     name='site_parser',
-    version='0.0.1',
+    version='0.1.2',
     author='Alexander Dubrovin',
     author_email='da070116@gmail.com',
     description='A Python site source application',
@@ -16,5 +16,5 @@ setup(
     classifiers=["Programming Language :: Python :: 3",
                  "License :: OSI Approved :: MIT License",
                  "Operating System :: OS Independent", ],
-    python_requires='==3.8',
+    python_requires='>=3.7',
 )

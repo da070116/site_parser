@@ -19,7 +19,6 @@ if __name__ == '__main__':
                 mgr.parse_news(host)
             except (ValueError, IncompleteRead, ProtocolError, ChunkedEncodingError) as e:
                 errors_counter += 1
-                print(f'Error {e} raised. Starts from beginning')
-
+                # print(f'Error {e} raised. Starts from beginning')
             if errors_counter == 0:
                 break

@@ -5,12 +5,14 @@ Wordpress based site
 ## Getting Started
 
 These instructions will get you a copy of the project up and running 
-on your local machine for development and testing purposes. 
-See deployment for notes on how to deploy the project on a live system.
+on your local machine for development purposes. 
+For notes on how to build application for use see SECTION: .
 
 ### Prerequisites
 
-What things you need to install the software and how to install them
+It is suggested that Python itself (version 3.7 or higher)
+as for pip (version 20.1.1) is installed. 
+You could use git to copy the project  
 
 ```
 Give examples
@@ -21,46 +23,25 @@ Give examples
 A step by step series of examples that tell you how to get a development 
 env running
 
-Say what the step will be
+Virtual environment is recommended to be set up before using
+```
+virtualenv venv cd venv/
+```
+Clone project
 
 ```
-Give the example
+git clone https://github.com/da070116/site_parser
 ```
 
-And repeat
-
-```
-until finished
-```
-
-End with an example of getting some data out of the system or using it for 
-a little demo
-
-## Running the tests
-
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
+Install all dependencies
+```commandline
+pip install -r requirements.txt 
 ```
 
 ## Deployment
 
 Add additional notes about how to deploy this on a live system
 
-## Built With
 
 
 ## Contributing
