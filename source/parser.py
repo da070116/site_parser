@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
-from news_record.news_record import NewsRecord
+from dbmanager.record import NewsRecord
+from dbmanager.sqlmanager import SQLManager
 
 
 class LibSiteParser:
@@ -47,7 +48,7 @@ class LibSiteParser:
 
     def parse_news(self, root_folder: str):
         page_address = self.URL_NEWS_ADDRESS.rsplit('/', 1)[0]
-        # news_data_list = []
+        db_manager = SQLManager()
         self.news_id_list.reverse()
         for index, record in enumerate(self.news_id_list):
             current_page = self.get_html(page_address + '/' + record)
@@ -56,11 +57,8 @@ class LibSiteParser:
             date_text = soup.find('div', id='news_date').text
             summary_text = soup.find('td', id='nsummary').get_text(strip=True)
             content_text = soup.find('td', id='nsummary').find_next('table').text
-
-            news_rec = NewsRecord([date_text, header_text, summary_text, content_text])
-
-            # print(f'{date_text} | {header_text} | {summary_text} | {content_text} \n=====\n')
+            content_text = summary_text + '<!--more-->' + content_text
+            news_rec = NewsRecord((date_text, header_text, summary_text, content_text))
+            db_manager.insert_record(news_rec)
             print(f'{root_folder}: parse {index + 1} of {len(self.news_id_list)}')
         print(f'Site {page_address} is ready')
-
-
