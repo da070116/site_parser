@@ -45,7 +45,7 @@ class LibSiteParser:
     def get_html(self, url: str, params=None) -> requests.models.Response:
         return requests.get(url, headers=self.HEADERS, params=params)
 
-    def parse_news(self, root_folder: str):
+    def parse_news(self):
         page_address = self.URL_NEWS_ADDRESS.rsplit('/', 1)[0]
         db_manager = SQLManager()
         self.news_id_list.reverse()
@@ -55,8 +55,10 @@ class LibSiteParser:
             header: str = soup.find('table', id='gblock1').find_previous('h3').text
             date: str = soup.find('div', id='news_date').text
             summary: str = soup.find('td', id='nsummary').get_text(strip=True)
+            summary = summary.rsplit(".", 1)[0]
             content: str = summary + '<!--more-->' + soup.find('td', id='nsummary').find_next('table').text
+            content = content.replace("'", "`")
             news_rec = NewsRecord((date, header, summary, content))
             db_manager.insert_record(news_rec)
-            print(f'{root_folder}: parse {index + 1} of {len(self.news_id_list)}')
+            print(f'parsed {index + 1} of {len(self.news_id_list)}')
         print(f'Site {page_address} is ready')

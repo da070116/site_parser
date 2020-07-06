@@ -35,13 +35,7 @@ class NewsRecord:
         return self.fulltext
 
     def get_latin_title(self):
-        raw_string = self.get_title().strip()
-        for sign in ("'", '(', ')', '"', '«', '»'):
+        raw_string = translit(self.get_title().strip().lower(), language_code='ru', reversed=True)
+        for sign in ("'", '(', ')', '"', '«', '»', ','):
             raw_string = raw_string.replace(sign, '')
-        raw_string = raw_string.replace(' ', '-')
-        return translit(raw_string.lower(), language_code='ru', reversed=True)
-#
-# a = NewsRecord(['1 ноября 2014', 'Заголовок', 'Краткое', 'Длинное описание новости'])
-# a.str_to_date()
-
-
+        return raw_string.replace(' ', '-')
