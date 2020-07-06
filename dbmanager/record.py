@@ -3,14 +3,14 @@ from transliterate import translit
 
 
 class NewsRecord:
-    def __init__(self, data: Tuple[str]):
+    def __init__(self, data: Tuple[str, str, str, str]):
         self.date = self.str_to_date(data[0])
-        self.header = data[1]
+        self.title = data[1]
         self.short = data[2]
         self.fulltext = data[3]
 
     def __str__(self):
-        return f'{type(self)} {self.get_date()}  {self.get_header()}'
+        return f'{type(self)} {self.get_date()}  {self.get_title()}'
 
     @staticmethod
     def str_to_date(date):
@@ -25,17 +25,17 @@ class NewsRecord:
     def get_date(self):
         return self.date
 
-    def get_header(self):
-        return self.header
+    def get_title(self):
+        return self.title
 
     def get_short(self):
         return self.short
 
-    def get_fulltext(self):
+    def get_content(self):
         return self.fulltext
 
-    def get_latin_name(self):
-        raw_string = self.get_header().strip()
+    def get_latin_title(self):
+        raw_string = self.get_title().strip()
         for sign in ("'", '(', ')', '"', '«', '»'):
             raw_string = raw_string.replace(sign, '')
         raw_string = raw_string.replace(' ', '-')
